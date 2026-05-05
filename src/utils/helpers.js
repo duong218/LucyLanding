@@ -10,14 +10,28 @@ export const getImageUrl = (img, params = 'w=800&q=80') => {
 };
 
 /**
- * Smooth-scroll to a DOM element by id.
+ * Smooth-scroll to a DOM element by id using the global Lenis instance.
+ * Falls back to native scrollIntoView if Lenis is not initialized.
  * Special case: id="home" scrolls to the top.
  */
 export const scrollToId = (id) => {
+  const lenis = window.__lenis;
+
   if (id === 'home') {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (lenis) {
+      lenis.scrollTo(0, { duration: 1.2 });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
     return;
   }
+
   const element = document.getElementById(id);
-  if (element) element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (!element) return;
+
+  if (lenis) {
+    lenis.scrollTo(element, { offset: -80, duration: 1.2 });
+  } else {
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
 };

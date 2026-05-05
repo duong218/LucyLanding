@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import Lenis from 'lenis';
 import { LangContext } from './context/LangContext';
 import { FloatingClouds, CartoonElement } from './components/shared/Index';
 import { AnimatePresence, motion } from 'motion/react';
@@ -33,6 +34,31 @@ export default function App() {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 5000);
   };
+
+  // Initialize Lenis smooth scroll
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
+
+    // Expose globally so scrollToId and other utilities can use it
+    window.__lenis = lenis;
+
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+      window.__lenis = null;
+    };
+  }, []);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('lucy-lang');

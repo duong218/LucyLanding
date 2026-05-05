@@ -130,7 +130,7 @@ export default function HeroSection() {
                             <div className="bg-purple p-2 rounded-xl text-white">
                                 <Users size={20} />
                             </div>
-                            <span className="text-[10px] font-black leading-tight uppercase tracking-widest text-purple">
+                            <span className="text-[10px] font-black leading-tight uppercase tracking-widest text-mustard">
                                 4.9/5 Phụ Huynh Hài Lòng
                             </span>
                         </div>
